@@ -1,47 +1,30 @@
 import React, { Fragment } from 'react';
-
-// Components
-
-import InstructionalText from '../../components/ssap/notifications/InstructionalText';
-
-// Utils
-
-import { normalizeStringToBooleanValue } from '../../utils/normalize/normalizeStringToBooleanValue';
-
+//import { normalizeStringToBooleanValue } from '../../../utils/normalize/normalizeStringToBooleanValue';
+import { FormattedMessage } from 'react-intl/dist';
 
 const Checkbox = props => {
 
-    const handleValueChange = e => {
-        const { dataset: { value } } = e.currentTarget;
-        props.inputActions.handleFieldChange(!normalizeStringToBooleanValue(value));
-    };
-
-    const keyPress = e => {
-        const isEnterOrSpace = e.key === ' ' || e.key === 'SpaceBar' || e.key === 'Enter' || e.keyCode === 32 || e.keyCode === 13;
-        if (isEnterOrSpace) {
-            handleValueChange(e);
-        }
-    };
-
     const {
         inputData: {
-            checked,
+            //checked,
             classes,
             id,
             isInputRequired,
-            name,
+            //name,
             type,
-            disabled
+            disabled,
+            //registeredInputs
         },
         label: {
-            dataInstructions,
-            replacements,
             text,
             labelClass
-        }
+        },
+        checked,
+        name,
+        onChange
     } = props;
 
-    return (
+    return(
         <div className={`gi-component gi-${type} ${classes}`}>
             <Fragment>
                 <input
@@ -54,34 +37,26 @@ const Checkbox = props => {
                     aria-required={isInputRequired}
                     data-value={checked}
                     aria-labelledby={`${type}_${id}_label`}
-                    onKeyPress={keyPress}
-                    checked={checked === null ? '' : checked}
-                    onChange={() => {}}
+                    onChange={onChange}
                     disabled={disabled}
-                    value={checked === null ? '' : checked}
+                    checked={checked}
                 />
 
                 <label
                     id={`${type}_${id}_label`}
                     htmlFor={id}
                     data-value={checked === null ? '' : checked}
-                    onClick={handleValueChange}
+                    //onClick={handleValueChange}
                     className={`usa-checkbox__label gi-${type}__label ${labelClass && labelClass.join(' ')}`}
                 >
-                    {text}
+                    <FormattedMessage id={ text } />
                 </label>
-
-                {dataInstructions &&
-                <InstructionalText
-                    Component={
-                        <span data-instructions={dataInstructions}/>
-                    }
-                    replacements={replacements}
-                />}
-
             </Fragment>
         </div>
     );
+
+
 };
+
 
 export default Checkbox;

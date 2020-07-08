@@ -1,75 +1,47 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl/dist';
 
-
-const Input  = props => {
-
+const Input = (props) => {
     const {
-        inputData: {
-            disabled,
-            id,
-            isInputRequired,
-            helperClasses,
-            name,
-            placeholder,
-            type,
-            value
-        },
-        inputActions: {
-            handleFieldChange,
-            handleFieldBlur
-        },
         label: {
             text,
-            labelClasses
+            labelClasses,
+            wrapperClasses,
+            isInputRequired
         },
-        labelIcon = {}
+        inputField: {
+            name,
+            inputClasses,
+            placeholder,
+            type,
+            value,
+            registeredInputs
+        }
     } = props;
-
-    const handleValueChange = e => {
-        handleFieldChange(e.target.value);
-    };
-
-    const handleValueBlur = e => {
-        handleFieldBlur(e.target.value);
-    };
 
     return (
         <Fragment>
-            <div className={`grid-row gi-component gi-${type} ${helperClasses && helperClasses.join(' ')}`}>
+            <div className={`grid-row gi-component gi-${type} ${wrapperClasses && wrapperClasses.join(' ')}`}>
                 <label
-                    htmlFor={id}
-                    className={`tablet:grid-col-4 gi-${type}__label ${labelClasses && labelClasses.join(' ')} iconed-${!!labelIcon.icon} required-${isInputRequired}`}
+                    htmlFor={name}
+                    className={`gi-input__label ${labelClasses && labelClasses.join(' ')} required-${isInputRequired}`}
                     aria-label={isInputRequired}
                 >
-                    { text }
-                    { labelIcon.icon ? labelIcon.icon : null }
+                    <FormattedMessage id={ text } />
                 </label>
                 <input
-                    id={id}
-                    className={`tablet:grid-col-6 gi-${type}__input`}
-                    disabled={disabled}
+                    id={name}
+                    className={`gi-${type}__input ${inputClasses && inputClasses.join(' ')}`}
                     name={name}
-                    type="text"
-                    value={value || ''}
-                    aria-required={isInputRequired}
+                    type={type}
+                    ref={registeredInputs}
                     placeholder={placeholder}
-                    onChange={handleValueChange}
-                    onBlur={handleValueBlur}
-                    onFocus={props.inputActions.onFieldFocus}
+                    aria-required={isInputRequired}
+                    value={value}
                 />
             </div>
         </Fragment>
     );
-};
-
-Input.propTypes = {
-    inputData: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        classes: PropTypes.arrayOf([PropTypes.string]),
-        value: PropTypes.any,
-        placeholder: PropTypes.string,
-    })
 };
 
 export default Input;
